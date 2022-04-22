@@ -1,4 +1,4 @@
-Below is a summary for each variable found in Fisher's Iris dataset
+Below is a summary for each variable found in Fisher's Iris dataset:
 
 For variable 1, the Sepal length is 5.1cm, the Sepal width is 3.5cm, the Petal length is 1.4cm, and the Petal width is 0.2cm. The class of plant is Iris-setosa.
 
