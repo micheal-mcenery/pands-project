@@ -2,7 +2,6 @@
 # A program which takes in Fisher's Iris dataset (reference #1), generates a summary for each of the three variables, creates a histogram representation for the attributes of each variable, 
 # creates a scatterplot graph to show the relationship between the attributes for each pair of variables, and creates a barchart representation for the mean attribute size of each variable.
 # Author: Micheal McEnery
-# Authors note: Initially, I believe I misinterpreted what was being asked of me for this project (this is reflected in my first two commits of this python file to github). As of commit #3 I believe I have course-corrected my project.
 
 
 # First, the program imports Pandas and Matplotlib.pyplot (reference #2)(reference #3).
@@ -31,6 +30,7 @@ def load_data():
             virginica = chunk
             list_of_variables.append(virginica)
         counter += 1
+
 
 
 # The below line defines a function which generates a text file featuring a summary for each of the three variables/species of iris in the dataset, including information on the mean, standard deviation, minimum and maximum values of each attribute of each variable.
@@ -97,6 +97,48 @@ def generate_histogram():
             plt.clf()
 
 
+# The below line defines a function which generates a scatterplot representation of the relationship between the linked attributes for each pair of variables/species of iris in the dataset.
+def generate_scatterplot():
+    # The "counter" variable serves to track which pair of linked attributes are being inputted to the scatterplots (first sepal, then petal attributes)
+    counter = 0
+    # The below "for loop" serves to loop all code below it twice (once for sepal attributes, and once for petal attributes)
+    for _ in range(0, 2):
+        # The "combination" variable serves to track which combination of plant variables are being inputted into the scatterplots
+        combination = 1
+        # The below "for loop" serves to loop all code below it three times, once for each of the three possible variable combinations.
+        for _ in range(0, 3):
+            # The below "if statement" serves to check the current combination to be inserted into the scatterplots, starting with combination #1
+            # The "species-#" variables pull the plant chunks from the "list_of_variables", corresponding to the three possible combinations
+            if combination == 1:
+                species_1 = list_of_variables[0]
+                species_2 = list_of_variables[1]
+            elif combination == 2:
+                species_1 = list_of_variables[1]
+                species_2 = list_of_variables[2]
+            elif combination == 3:
+                species_1 = list_of_variables[0]
+                species_2 = list_of_variables[2]
+            # Below, the two pyplot.scatter lines serve to create a signle scatterplot which two sources of information (reference #20)
+            # The relevant data columns are selected using the Dataframe.get method, and the counter variable
+            # pyplot.scatter also takes in the parameters "color" (which sets the color of the selected data), "marker" (which sets the shape of the data markers)(reference #21), "s" (which sets the size of the data markers), and "alpha" (which sets the transparency of data markers)
+            plt.scatter(species_1.get(counter), species_1.get(counter + 1), color="red", marker="x", s=75)
+            plt.scatter(species_2.get(counter), species_2.get(counter + 1), color="blue", alpha=0.5)
+            # pyplot.title sets the title of the scatterplot, and pull required information as outlined previously in the generate_histogram function
+            # The title() function, when applied to a string, capitalises the first characters of each word in the string. This was done to improve the look of each graph (reference #22)
+            plt.title(f"{species_1.iat[0, 4]} and {species_2.iat[0, 4]}: {list_of_attributes[counter].title()} and {list_of_attributes[counter + 1].title()}")
+            # pyplot.legend inserts a legend into the scatterplot identifying the two variables present in the scatterplot and their associoated colors
+            plt.legend([f"{species_1.iat[0, 4]}", f"{species_2.iat[0, 4]}"])
+            # Both of the pyplot label lines below provide labels for both the x-axis and the y-axis
+            plt.xlabel(f"{list_of_attributes[counter]}".title())
+            plt.ylabel(f"{list_of_attributes[counter + 1]}".title())
+            # pyplot.savefig saves the figure, if given a title, as a specificed file type (in this case .png) to a specified directory
+            plt.savefig(f"./images/scatterplots/{species_1.iat[0, 4]} and {species_2.iat[0, 4]}/Scatterplot of {list_of_attributes[counter]} and {list_of_attributes[counter + 1]} in {species_1.iat[0, 4]} and {species_2.iat[0, 4]}.png")
+            # pyplot.clf clears the figure created above after the figure has been saved as a png, as not to impact the proceeding figures 
+            plt.clf()
+            combination += 1
+        counter = 2
+
+
 # This line creates a list titled "list_of_variables".
 list_of_variables = []
 # This line creates a list titled "list_of_attributes" which holds the names of the four attributes associoated with the three variables in the same sequence they are presented in the dataset.
@@ -114,6 +156,8 @@ with pd.read_csv("iris.data", header=None, chunksize=50) as reader:
     generate_summary()
     # The program then calls the generate_histogram function (defined above).
     generate_histogram()
+    # The program then calls the generate_scatterplot function (defined above).
+    generate_scatterplot()
 
 
 
@@ -138,3 +182,6 @@ with pd.read_csv("iris.data", header=None, chunksize=50) as reader:
 # Reference #17: https://matplotlib.org/3.5.0/api/_as_gen/matplotlib.pyplot.clf.html
 # Reference #18: https://matplotlib.org/3.5.0/api/_as_gen/matplotlib.patches.Patch.html#matplotlib.patches.Patch
 # Reference #19: https://matplotlib.org/3.5.0/api/_as_gen/matplotlib.pyplot.grid.html#matplotlib.pyplot.grid
+# Reference #20: https://realpython.com/visualizing-python-plt-scatter/#exploring-pltscatter-further
+# Reference #21: https://matplotlib.org/stable/api/markers_api.html#module-matplotlib.markers
+# Reference #22: https://thispointer.com/python-capitalize-the-first-letter-of-each-word-in-a-string/#:~:text=Use%20title()%20to%20capitalize,of%20word%20to%20lower%20case.
