@@ -32,7 +32,6 @@ def load_data():
         counter += 1
 
 
-
 # The below line defines a function which generates a text file featuring a summary for each of the three variables/species of iris in the dataset, including information on the mean, standard deviation, minimum and maximum values of each attribute of each variable.
 def generate_summary():
     # The program uses the open() and write() functions to open and write to a text file called "summary_text_file" (reference #7)
@@ -85,8 +84,6 @@ def generate_histogram():
             # {attribute} pulls the name of each attribute from the "list_of_attributes"
             # pandas.DataFrame.iat returns the value of a cell if given the row index, and column index (reference #6). This provides the variable name for each of the 3 variables (variable name is always located in column "4").
             plt.title(f"Histogram of {attribute} in {plant.iat[0, 4]}")
-            # pyplot.grid() enables the grid lines, improving readability of the graph, with parameter setting them to only be visable on the y-axis (reference #19)
-            plt.grid(True, axis="y")
             # pyplot.savefig() saves the figure, if given a title, as a specificed file type (in this case .png) to a specified directory (reference #16)
             # pandas.DataFrame.iat returns the value of a cell if given the row index, and column index (reference #6). This directs which folder the figure will be saved in, and also influences the title of the figure.
             # {attribute} pulls the name of each attribute from the "list_of_attributes"
@@ -118,13 +115,13 @@ def generate_scatterplot():
             elif combination == 3:
                 species_1 = list_of_variables[0]
                 species_2 = list_of_variables[2]
-            # Below, the two pyplot.scatter lines serve to create a signle scatterplot which two sources of information (reference #20)
+            # Below, the two pyplot.scatter lines serve to create a signle scatterplot which two sources of information (reference #19)
             # The relevant data columns are selected using the Dataframe.get method, and the counter variable
-            # pyplot.scatter also takes in the parameters "color" (which sets the color of the selected data), "marker" (which sets the shape of the data markers)(reference #21), "s" (which sets the size of the data markers), and "alpha" (which sets the transparency of data markers)
+            # pyplot.scatter also takes in the parameters "color" (which sets the color of the selected data), "marker" (which sets the shape of the data markers)(reference #20), "s" (which sets the size of the data markers), and "alpha" (which sets the transparency of data markers)
             plt.scatter(species_1.get(counter), species_1.get(counter + 1), color="red", marker="x", s=75)
             plt.scatter(species_2.get(counter), species_2.get(counter + 1), color="blue", alpha=0.5)
             # pyplot.title sets the title of the scatterplot, and pull required information as outlined previously in the generate_histogram function
-            # The title() function, when applied to a string, capitalises the first characters of each word in the string. This was done to improve the look of each graph (reference #22)
+            # The title() function, when applied to a string, capitalises the first characters of each word in the string. This was done to improve the look of each graph (reference #21)
             plt.title(f"{species_1.iat[0, 4]} and {species_2.iat[0, 4]}: {list_of_attributes[counter].title()} and {list_of_attributes[counter + 1].title()}")
             # pyplot.legend inserts a legend into the scatterplot identifying the two variables present in the scatterplot and their associoated colors
             plt.legend([f"{species_1.iat[0, 4]}", f"{species_2.iat[0, 4]}"])
@@ -137,6 +134,35 @@ def generate_scatterplot():
             plt.clf()
             combination += 1
         counter = 2
+
+
+# The below line defines a function which generates a barchart representation of the mean attribute size of each species of iris for each attribute.
+def generate_barchart():
+    # The "counter" variable tracks which column from the dataset should be inputted
+    counter = 0
+    # For each attribute in the "list_of_attributes" a barchart is created
+    for attribute in list_of_attributes:
+        # The below line creates am empty dictionary object called "mean_dictionary"
+        mean_dictionary = {}
+        # For each species of iris in "list_of_variables" the mean values of the specified column and the name of the species in question are saved to variables
+        # The variables appended as key value pairs to the previously created "mean_dictionary" using dict.update() (reference #23)
+        for plant in list_of_variables:
+            mean = plant.get(counter).mean()
+            name = plant.iat[0, 4]
+            mean_dictionary.update({name : mean})
+        # The keys from "mean_dictionary" are then saved to a list titled "names"
+        names = list(mean_dictionary.keys())
+        # The values from "mean_dictionary" are also saved to a list, titled "means"
+        means = list(mean_dictionary.values())
+        # pyplot.bar is used to generate a barchart, with the lists "names" and "means" being input as the information for the barchart. Color and column width are also defined (reference #22)
+        plt.bar(names, means, color="teal", width=0.5)
+        # I have previously outlined the remaining lines in this function in other functions.
+        plt.xlabel("Species of Iris")
+        plt.ylabel(f"Mean {attribute}")
+        plt.title(f"Mean {attribute.title()} of each species of Iris")
+        plt.savefig(f"./images/barcharts/Barchart of mean {attribute} in each species.png")
+        plt.clf()
+        counter += 1
 
 
 # This line creates a list titled "list_of_variables".
@@ -158,6 +184,8 @@ with pd.read_csv("iris.data", header=None, chunksize=50) as reader:
     generate_histogram()
     # The program then calls the generate_scatterplot function (defined above).
     generate_scatterplot()
+    # The program lastly calls the generate_barchart function (defined above).
+    generate_barchart()
 
 
 
@@ -181,7 +209,8 @@ with pd.read_csv("iris.data", header=None, chunksize=50) as reader:
 # Reference #16: https://matplotlib.org/3.5.0/api/_as_gen/matplotlib.pyplot.savefig.html#matplotlib.pyplot.savefig
 # Reference #17: https://matplotlib.org/3.5.0/api/_as_gen/matplotlib.pyplot.clf.html
 # Reference #18: https://matplotlib.org/3.5.0/api/_as_gen/matplotlib.patches.Patch.html#matplotlib.patches.Patch
-# Reference #19: https://matplotlib.org/3.5.0/api/_as_gen/matplotlib.pyplot.grid.html#matplotlib.pyplot.grid
-# Reference #20: https://realpython.com/visualizing-python-plt-scatter/#exploring-pltscatter-further
-# Reference #21: https://matplotlib.org/stable/api/markers_api.html#module-matplotlib.markers
-# Reference #22: https://thispointer.com/python-capitalize-the-first-letter-of-each-word-in-a-string/#:~:text=Use%20title()%20to%20capitalize,of%20word%20to%20lower%20case.
+# Reference #19: https://realpython.com/visualizing-python-plt-scatter/#exploring-pltscatter-further
+# Reference #20 https://matplotlib.org/stable/api/markers_api.html#module-matplotlib.markers
+# Reference #21: https://thispointer.com/python-capitalize-the-first-letter-of-each-word-in-a-string/#:~:text=Use%20title()%20to%20capitalize,of%20word%20to%20lower%20case.
+# Reference #22: https://www.geeksforgeeks.org/bar-plot-in-matplotlib/
+# Reference #23: https://thispointer.com/python-how-to-add-append-key-value-pairs-in-dictionary-using-dict-update/
