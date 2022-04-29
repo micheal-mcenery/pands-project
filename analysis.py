@@ -1,6 +1,6 @@
 # analysis.py
-# A program which takes in Fisher's Iris dataset (reference #1), generates a summary for each of the three variables, creates a histogram representation for the attributes of each variable, 
-# creates a scatterplot graph to show the relationship between the attributes for each pair of variables, and creates a barchart representation for the mean attribute size of each variable.
+# A program which takes in Fisher's Iris dataset (reference #1), generates a text file summary for each of the three variables, creates a histogram representation of the attributes of each variable, 
+# creates a scatterplot graph to show the relationship between the attributes of each pair of variables, and creates a barchart representation of the mean attribute size of each variable.
 # Author: Micheal McEnery
 
 
